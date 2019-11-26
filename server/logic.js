@@ -2,26 +2,30 @@
  * Game Logic
  */
 
-// State
-//      Stores the current game state
-// Keys:
-//      board
-//      boardSize
-//      snake
-//          body
-//          direction
-//      apple
-//      score
-//      status
+/* 
+ * State
+ *      Stores the current game state
+ * Keys:
+ *      board
+ *      boardSize
+ *      snake
+ *          body
+ *          direction
+ *      apple
+ *      score
+ *      status
+ */
 let state = {}
 
-// Create Board
-//      Return an empty board object
-// Args: size > 0
-// Return: None
-// Create:
-//      board = [[h|b|a|b|n]]
-//      coord(x,y) = head | body | apple | border | none
+/*
+ * Create Board
+ *      Return an empty board object
+ * Args: size > 0
+ * Return: None
+ * Create:
+ *      board = [[h|b|a|b|n]]
+ *      coord(x,y) = head | body | apple | border | none
+ */
 
 function createBoard(size) {
     assert(size > 0, "Board must be larger than 0x0.");
@@ -40,15 +44,17 @@ function createBoard(size) {
     state.boardSize = size;
 }
 
-// Create Snake
-//      Return an initial snake object
-// Args: None
-// Return: None
-// Create:
-//      snake = {
-//          body: [head,[x,y],tail],
-//          direction: up | right | down | left
-//          }
+/*
+ * Create Snake
+ *      Return an initial snake object
+ * Args: None
+ * Return: None
+ * Create:
+ *      snake = {
+ *          body: [head,[x,y],tail],
+ *          direction: up | right | down | left
+ *          }
+ */
 
 function createSnake() {
     start = Math.floor(state.boardSize / 2)
@@ -61,10 +67,12 @@ function createSnake() {
     updateBoard([start,start], "Head");
 }
 
-// Start Game
-//      Set up state
-// Args: size (default 15)
-// Return: None
+/*
+ * Start Game
+ *      Set up state
+ * Args: size (default 15)
+ * Return: None
+ */
 
 function startGame(size=15) {
     createBoard(size);
@@ -76,10 +84,12 @@ function startGame(size=15) {
     addApple();
 }
 
-// Update Board
-//      Update point (x,y) on the board
-// Args: coordinate, value
-// Return: None
+/*
+ * Update Board
+ *      Update point (x,y) on the board
+ * Args: coordinate, value
+ * Return: None
+ */
 
 function updateBoard(coordinate, value) {
     x = coordinate[0]
@@ -88,10 +98,12 @@ function updateBoard(coordinate, value) {
     state.board[y][x] = value
 }
 
-// Move
-//      Move the snake one step
-// Args: None
-// Return: None
+/*
+ * Move
+ *      Move the snake one step
+ * Args: None
+ * Return: None
+ */
 
 function move() {
     assert(state.status == "Playing", "Game not currently running.");
@@ -140,10 +152,12 @@ move.check = function(coord) {
     }
 }
 
-// Change direction
-//      Change the direction of the snake
-// Args: Direction
-// Return: None
+/*
+ * Change direction
+ *      Change the direction of the snake
+ * Args: Direction
+ * Return: None
+ */
 
 function changeDirection(direction) {
     assert(state.status == "Playing", "Game not currently running.");
@@ -160,10 +174,12 @@ function changeDirection(direction) {
     state.snake.direction = direction;
 }
 
-// Add apple
-//      Add an apple to the board
-// Args: None
-// Return: None
+/*
+ * Add apple
+ *      Add an apple to the board
+ * Args: None
+ * Return: None
+ */
 
 function addApple() {
     assert(state.status == "Playing", "Game not currently running.");
@@ -183,10 +199,12 @@ function addApple() {
     state.apple = [x,y];
 }
 
-// Die
-//      Finishes the game
-// Args: None
-// Return: None
+/*
+ * Die
+ *      Finishes the game
+ * Args: None
+ * Return: None
+ */
 
 function die() {
     assert(state.status == "Playing", "Game not currently running.");
@@ -197,10 +215,12 @@ function die() {
     }
 }
 
-// Score
-//      Win a point
-// Args: None
-// Return: None
+/*
+ * Score
+ *      Win a point
+ * Args: None
+ * Return: None
+ */
 
 function score() {
     assert(state.status == "Playing", "Game not currently running.");
@@ -209,19 +229,23 @@ function score() {
     addApple();
 }
 
-// Get Board
-//      Returns the board from state
-// Args: None
-// Return: Board
+/*
+ * Get Board
+ *      Returns the board from state
+ * Args: None
+ * Return: Board
+ */
 
 function getBoard() {
     return state.board;
 }
 
-// Get Score
-//      Returns the score from state
-// Args: None
-// Return: Score
+/*
+ * Get Score
+ *      Returns the score from state
+ * Args: None
+ * Return: Score
+ */
 
 function getScore() {
     return state.score;
