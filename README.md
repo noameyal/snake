@@ -7,7 +7,7 @@ An experiment in creating web games and teaching AI to beat them. Inspired by co
 - Phaser.js
 ## To Do
 - [x] Create game logic
-- [ ] Create game graphic interface
+- [x] Create game graphic interface
 - [ ] Add neural network
 ## Running
 Requires `npm` or `yarn`.
