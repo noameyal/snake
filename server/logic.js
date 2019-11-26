@@ -13,7 +13,7 @@
 //      apple
 //      score
 //      status
-state = {}
+let state = {}
 
 // Create Board
 //      Return an empty board object
@@ -58,6 +58,7 @@ function createSnake() {
     }
 
     state.snake = snake;
+    updateBoard([start,start], "Head");
 }
 
 // Start Game
@@ -70,6 +71,7 @@ function startGame(size=15) {
     createSnake();
 
     state.status = "Playing";
+    state.score = 0;
 
     addApple();
 }
@@ -83,7 +85,7 @@ function updateBoard(coordinate, value) {
     x = coordinate[0]
     y = coordinate[1]
 
-    state.board[x][y] = value
+    state.board[y][x] = value
 }
 
 // Move
@@ -101,11 +103,13 @@ function move() {
     next = move.next(direction, head);
     state.snake.body.unshift(next);
 
+    move.check(next);
+
+    if (state.status == "Dead") return;
+
+    updateBoard(head, "Body");
     updateBoard(tail, "None");
     updateBoard(next, "Head");
-    updateBoard(head, "Body");
-
-    move.check(next);
 }
 
 // Next: Helper function for move
@@ -123,7 +127,7 @@ move.check = function(coord) {
     x = coord[0];
     y = coord[1];
 
-    switch (state.board[x][y]) {
+    switch (state.board[y][x]) {
         case "Body":
         case "Border":
             die();
@@ -166,8 +170,13 @@ function addApple() {
     
     size = state.boardSize;
 
-    x = Math.floor(Math.random() * (size + 1));
-    y = Math.floor(Math.random() * (size + 1));
+    x = Math.floor(Math.random() * size) + 1;
+    y = Math.floor(Math.random() * size) + 1;
+
+    while (state.board[y][x] != "None") {
+        x = Math.floor(Math.random() * size) + 1;
+        y = Math.floor(Math.random() * size) + 1;
+    }
 
     updateBoard([x,y], "Apple");
 
@@ -200,9 +209,27 @@ function score() {
     addApple();
 }
 
+// Get Board
+//      Returns the board from state
+// Args: None
+// Return: Board
+
+function getBoard() {
+    return state.board;
+}
+
+// Get Score
+//      Returns the score from state
+// Args: None
+// Return: Score
+
+function getScore() {
+    return state.score;
+}
+
 module.exports = {
-    board: state.board,
-    score: state.score,
+    getBoard,
+    getScore,
     startGame,
     move,
     changeDirection
