@@ -15,7 +15,7 @@
  *      score
  *      status
  */
-let state = {}
+var state = {}
 
 /*
  * Create Board
@@ -28,7 +28,7 @@ let state = {}
  */
 
 function createBoard(size) {
-    assert(size > 0, "Board must be larger than 0x0.");
+     //assert(size > 0, "Board must be larger than 0x0.");
 
     board = [];
     for (x=0; x <= (size + 1) ; x++) {
@@ -106,21 +106,19 @@ function updateBoard(coordinate, value) {
  */
 
 function move() {
-    assert(state.status == "Playing", "Game not currently running.");
-    
+    if (state.status != "Playing") return;
+
     head = state.snake.body[0];
     direction = state.snake.direction;
 
-    tail = state.snake.body.pop();
     next = move.next(direction, head);
     state.snake.body.unshift(next);
 
-    move.check(next);
+    updateBoard(head, "Body");
 
+    move.check(next);
     if (state.status == "Dead") return;
 
-    updateBoard(head, "Body");
-    updateBoard(tail, "None");
     updateBoard(next, "Head");
 }
 
@@ -148,6 +146,8 @@ move.check = function(coord) {
             score();
             break;
         default:
+            tail = state.snake.body.pop();
+            updateBoard(tail, "None");
             break;
     }
 }
@@ -160,8 +160,8 @@ move.check = function(coord) {
  */
 
 function changeDirection(direction) {
-    assert(state.status == "Playing", "Game not currently running.");
-    
+    if (state.status != "Playing") return;
+
     opposite = {
         right: "left",
         left: "right",
@@ -182,7 +182,7 @@ function changeDirection(direction) {
  */
 
 function addApple() {
-    assert(state.status == "Playing", "Game not currently running.");
+    if (state.status != "Playing") return;
     
     size = state.boardSize;
 
@@ -207,7 +207,7 @@ function addApple() {
  */
 
 function die() {
-    assert(state.status == "Playing", "Game not currently running.");
+    if (state.status != "Playing") return;
     
     state = {
         score: state.score,
@@ -223,7 +223,7 @@ function die() {
  */
 
 function score() {
-    assert(state.status == "Playing", "Game not currently running.");
+    if (state.status != "Playing") return;
     
     state.score++;
     addApple();
@@ -258,10 +258,11 @@ function getScore() {
  * Return: Status
  */
 
- function getStatus() {
-     return state.status;
- }
+function getStatus() {
+    return state.status;
+}
 
+/*
 module.exports = {
     getBoard,
     getScore,
@@ -270,3 +271,4 @@ module.exports = {
     move,
     changeDirection
 }
+*/
