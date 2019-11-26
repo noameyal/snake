@@ -251,9 +251,21 @@ function getScore() {
     return state.score;
 }
 
+/*
+ * Get Status
+ *      Returns the status from state
+ * Args: None
+ * Return: Status
+ */
+
+ function getStatus() {
+     return state.status;
+ }
+
 module.exports = {
     getBoard,
     getScore,
+    getStatus,
     startGame,
     move,
     changeDirection
