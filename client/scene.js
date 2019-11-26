@@ -1,3 +1,5 @@
+var size = 25;
+
 function preload() {
     this.load.image('apple', './assets/apple.png')
     this.load.image('background', './assets/background.png')
@@ -5,12 +7,10 @@ function preload() {
     this.load.image('snake', './assets/snake.png')
 }
 
-var cursors;
-
 function drawBoard() {
     status = getStatus()
     if (status == "Dead") return;
-    
+
     board = getBoard()
     y = 0
     board.forEach(row => {
@@ -43,7 +43,7 @@ function showMove() {
 }
 
 function create() {
-    startGame()
+    startGame(size)
     drawBoard.bind(this)()
 
     this.input.keyboard.on("keydown-UP", event => {
@@ -68,24 +68,4 @@ function create() {
 }
 
 function update() {
-/*
-    if (cursors.up.isDown) {
-        objects.text.setVelocityY(-200)
-    }
-    else if (cursors.down.isDown) {
-        objects.text.setVelocityY(200)
-    }
-    else {
-        objects.text.setVelocityY(0)
-    }
-
-    if (cursors.left.isDown) {
-        objects.text.setVelocityX(-200)
-    }
-    else if (cursors.right.isDown) {
-        objects.text.setVelocityX(200)
-    }
-    else {
-        objects.text.setVelocityX(0)
-    }*/
 }
