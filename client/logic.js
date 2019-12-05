@@ -23,7 +23,7 @@ var state = {}
  *      coord(x,y) = head | body | apple | border | none
  */
 
-function createBoard(size) {
+function createBoard(size, hook=()=>{}) {
     if (size <= 0) {
         console.warn("Board must be larger than 0x0.");
         return;
@@ -34,7 +34,9 @@ function createBoard(size) {
         row = [];
         for (y=0; y <= (size + 1); y++) {
             isBorder = x == 0 || y == 0 || x == (size + 1) || y == (size + 1);
-            row.push(isBorder ? "Border" : "None");
+            item = isBorder ? "Border" : "None";
+            row.push(item);
+            hook(item, x, y);
         }
         board.push(row);
     }
@@ -55,7 +57,7 @@ function createBoard(size) {
  *          }
  */
 
-function createSnake() {
+function createSnake(hook=updateBoard) {
     start = Math.floor(state.boardSize / 2)
     snake = {
         body: [[start, start]],
@@ -63,7 +65,7 @@ function createSnake() {
     }
 
     state.snake = snake;
-    updateBoard([start,start], "Head");
+    hook([start,start], "Head");
 }
 
 /*
@@ -73,14 +75,18 @@ function createSnake() {
  * Return: None
  */
 
-function startGame(size=15) {
-    createBoard(size);
-    createSnake();
+function startGame(
+    size=15,
+    boardHook=createBoard,
+    snakeHook=createSnake,
+    appleHook=addApple) {
+    boardHook(size);
+    snakeHook();
 
     state.status = "Playing";
     state.score = 0;
 
-    addApple();
+    appleHook();
 }
 
 /*
@@ -90,11 +96,12 @@ function startGame(size=15) {
  * Return: None
  */
 
-function updateBoard(coordinate, value) {
+function updateBoard(coordinate, value, hook=()=>{}) {
     x = coordinate[0]
     y = coordinate[1]
 
-    state.board[y][x] = value
+    state.board[y][x] = value;
+    hook(value, x, y);
 }
 
 /*
@@ -104,7 +111,7 @@ function updateBoard(coordinate, value) {
  * Return: None
  */
 
-function move() {
+function move(hook=updateBoard, scoreHook=score, dieHook=die) {
     if (state.status != "Playing") return;
 
     head = state.snake.body[0];
@@ -113,12 +120,12 @@ function move() {
     next = move.next(direction, head);
     state.snake.body.unshift(next);
 
-    updateBoard(head, "Body");
+    hook(head, "Body");
 
-    move.check(next);
+    move.check(next, hook, dieHook, scoreHook);
     if (state.status == "Dead") return;
 
-    updateBoard(next, "Head");
+    hook(next, "Head");
 }
 
 // Next: Helper function for move
@@ -132,21 +139,21 @@ move.next = function(direction, head) {
 }
 
 // Check: Helper function for move
-move.check = function(coord) {
+move.check = function(coord, drawHook, dieHook, scoreHook) {
     x = coord[0];
     y = coord[1];
 
     switch (state.board[y][x]) {
         case "Body":
         case "Border":
-            die();
+            dieHook();
             break;
         case "Apple":
-            score();
+            scoreHook();
             break;
         default:
             tail = state.snake.body.pop();
-            updateBoard(tail, "None");
+            drawHook(tail, "None");
             break;
     }
 }
@@ -180,7 +187,7 @@ function changeDirection(direction) {
  * Return: None
  */
 
-function addApple() {
+function addApple(hook=updateBoard) {
     if (state.status != "Playing") return;
     
     size = state.boardSize;
@@ -193,7 +200,7 @@ function addApple() {
         y = Math.floor(Math.random() * size) + 1;
     }
 
-    updateBoard([x,y], "Apple");
+    hook([x,y], "Apple");
 
     state.apple = [x,y];
 }
@@ -221,11 +228,11 @@ function die() {
  * Return: None
  */
 
-function score() {
+function score(hook=addApple) {
     if (state.status != "Playing") return;
     
     state.score++;
-    addApple();
+    hook();
 }
 
 /*

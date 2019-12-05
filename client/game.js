@@ -2,6 +2,8 @@
 ** Configure Game
 */
 
+var size = 30;
+
 var config = {
     type: Phaser.WEBGL,
     width: 16 * size,
@@ -20,11 +22,46 @@ var config = {
 
 var game = new Phaser.Game(config);
 
+var directionQueue = [];
+
 function preload() {
-    this.load.image('apple', './assets/apple.png');
-    this.load.image('snake', './assets/snake.png');
+    this.load.image('Apple', './assets/apple.png');
+    this.load.image('Snake', './assets/snake.png');
 }
 
-function create() {
+function showMove() {
+    if (directionQueue.length != 0) {
+        changeDirection(directionQueue.pop())
+    }
+    drawMove()
+}
+
+function create() { 
+    game = this;
+    
+    drawGame(size);
+
+    this.input.keyboard.on("keydown-UP", event => {
+        directionQueue.unshift("up")
+    })
+    this.input.keyboard.on("keydown-DOWN", event => {
+        directionQueue.unshift("down")
+    })
+    this.input.keyboard.on("keydown-LEFT", event => {
+        directionQueue.unshift("left")
+    })
+    this.input.keyboard.on("keydown-RIGHT", event => {
+        directionQueue.unshift("right")
+    })
+    
+    timedEvent = this.time.addEvent({
+        delay: 250, 
+        callback: showMove.bind(this), 
+        callbackScope: this, 
+        loop: true 
+    });
+}
+
+function update() {
 
 }
