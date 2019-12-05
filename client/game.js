@@ -43,15 +43,19 @@ function create() {
 
     this.input.keyboard.on("keydown-UP", event => {
         directionQueue.unshift("up")
+        if (directionQueue.length > 2) directionQueue.pop();
     })
     this.input.keyboard.on("keydown-DOWN", event => {
         directionQueue.unshift("down")
+        if (directionQueue.length > 2) directionQueue.pop();
     })
     this.input.keyboard.on("keydown-LEFT", event => {
         directionQueue.unshift("left")
+        if (directionQueue.length > 2) directionQueue.pop();
     })
     this.input.keyboard.on("keydown-RIGHT", event => {
         directionQueue.unshift("right")
+        if (directionQueue.length > 2) directionQueue.pop();
     })
     
     timedEvent = this.time.addEvent({
