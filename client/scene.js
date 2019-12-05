@@ -1,4 +1,6 @@
 var size = 25;
+var boardObjects = [];
+var directionQueue = [];
 
 function preload() {
     this.load.image('apple', './assets/apple.png')
@@ -9,6 +11,10 @@ function preload() {
 
 function drawBoard() {
     status = getStatus()
+    boardObjects.forEach(function (object) {
+        object.destroy();
+    });
+
     if (status == "Dead") return;
 
     board = getBoard()
@@ -17,18 +23,15 @@ function drawBoard() {
         x = 0
         row.forEach(tile => {
             switch (tile) {
-                case "None":
-                    this.add.image(x, y, 'background').setOrigin(0, 0);
-                    break;
                 case "Head":
                 case "Body":
-                    this.add.image(x, y, 'snake').setOrigin(0, 0);
+                    boardObjects.push(this.add.image(x, y, 'snake').setOrigin(0, 0));
                     break;
                 case "Apple":
-                    this.add.image(x, y, 'apple').setOrigin(0, 0);
+                    boardObjects.push(this.add.image(x, y, 'apple').setOrigin(0, 0));
                     break;
                 case "Border":
-                    this.add.image(x, y, 'border').setOrigin(0, 0);
+                    boardObjects.push(this.add.image(x, y, 'border').setOrigin(0, 0));
                     break;
             }
             x += 16
@@ -38,6 +41,9 @@ function drawBoard() {
 }
 
 function showMove() {
+    if (directionQueue.length != 0) {
+        changeDirection(directionQueue.pop())
+    }
     move()
     drawBoard.bind(this)()
 }
@@ -47,20 +53,20 @@ function create() {
     drawBoard.bind(this)()
 
     this.input.keyboard.on("keydown-UP", event => {
-        changeDirection("up")
+        directionQueue.unshift("up")
     })
     this.input.keyboard.on("keydown-DOWN", event => {
-        changeDirection("down")
+        directionQueue.unshift("down")
     })
     this.input.keyboard.on("keydown-LEFT", event => {
-        changeDirection("left")
+        directionQueue.unshift("left")
     })
     this.input.keyboard.on("keydown-RIGHT", event => {
-        changeDirection("right")
+        directionQueue.unshift("right")
     })
     
     timedEvent = this.time.addEvent({
-        delay: 500, 
+        delay: 250, 
         callback: showMove.bind(this), 
         callbackScope: this, 
         loop: true 
