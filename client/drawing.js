@@ -8,7 +8,6 @@ function pushObject(object, x, y) {
 function drawItem(item, x, y) {
     xPos = (x - 1) * 16;
     yPos = (y - 1) * 16;
-    console.log({item, x, y})
     switch (item) {
         case 'Apple':
             object = game.add.image(xPos, yPos, "Apple").setOrigin(0);
@@ -60,9 +59,10 @@ function drawDeath() {
             if (item) item.destroy();
         })
     })
+
+    game.scene.start('End');
 }
 
 function drawScore() {
-    console.log({from: "score"})
     score(drawApple);
 }
