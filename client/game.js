@@ -2,23 +2,34 @@
 ** Configure Game
 */
 
-var size = 30;
+var size, config, game;
 
-var config = {
-    type: Phaser.WEBGL,
-    width: 16 * size,
-    height: 16 * size,
-    backgroundColor: '#000000',
-    pixelArt: true,
-};
+function startPhaserGame(size) {
+    if (game) {
+        document.getElementById('game').innerHTML = ""
+        game.sys.game.destroy(true);
+        game = null;
+    }
 
-/*
-** Create Game
-*/
+    config = {
+        type: Phaser.WEBGL,
+        width: 16 * size,
+        height: 16 * size,
+        backgroundColor: '#000000',
+        pixelArt: true,
+        parent: 'game',
+    };
 
-var game = new Phaser.Game(config);
-game.scene.add('Main', Main);
-game.scene.add('Start', Start);
-game.scene.add('End', End);
+    /*
+    ** Create Game
+    */
 
-game.scene.start('Start');
+    game = new Phaser.Game(config);
+    game.scene.add('Main', Main);
+    game.scene.add('Start', Start);
+    game.scene.add('End', End);
+
+    game.scene.start('Start');
+}
+
+startPhaserGame(30);

@@ -8,15 +8,17 @@ class Start extends Phaser.Scene {
     }
 
     create () {
-        var x = config.width / 2;
-        var y = config.height / 2;
+        game = this;
 
-        var scalex = Math.floor(config.width / (32 * 1.5));
-        var scaley = Math.floor(config.height / (32 * 1.5));
+        var x = game.scale.width / 2;
+        var y = game.scale.height / 2;
+
+        var scalex = Math.floor(game.scale.width / (32 * 1.5));
+        var scaley = Math.floor(game.scale.height / (32 * 1.5));
 
         var startButton = this.add.image(x, y, 'Start')
-            .setScale(scalex,scaley).
-            setInteractive()
+            .setScale(scalex,scaley)
+            .setInteractive()
         ;
 
         startButton.on('pointerup', function () {

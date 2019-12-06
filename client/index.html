@@ -11,5 +11,22 @@
     </head>
     <body>
         <h1>Snake</h1>
+        <input type="range" min="5" max="50" value="30" class="slider" id="size" style="width:90%;">
+        <p style="width:5%;display:inline-block;" id="sliderValue"></p>
+        <div id="game"></div>
+        <script>
+            var slider = document.getElementById("size");
+            var output = document.getElementById("sliderValue");
+
+            slider.onchange = function () {
+                size = parseInt(slider.value)
+                startPhaserGame(size);
+            }
+            slider.oninput = function () {
+                output.innerHTML = slider.value;
+            }
+            size = parseInt(slider.value)
+            output.innerHTML = slider.value;
+        </script>
     </body>
 </html>

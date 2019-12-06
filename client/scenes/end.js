@@ -8,11 +8,13 @@ class End extends Phaser.Scene {
     }
 
     create () {
-        var x = config.width / 2;
-        var y = config.height / 2;
+        game = this;
 
-        var scalex = Math.floor(config.width / (32 * 1.5));
-        var scaley = Math.floor(config.height / (32 * 1.5));
+        var x = game.scale.width / 2;
+        var y = game.scale.height / 2;
+
+        var scalex = Math.floor(game.scale.width / (32 * 1.5));
+        var scaley = Math.floor(game.scale.height / (32 * 1.5));
 
         var startButton = this.add.image(x, y, 'Start')
             .setScale(scalex,scaley).
@@ -24,9 +26,9 @@ class End extends Phaser.Scene {
         }.bind(this))
 
         var height = scalex * 32;
-        var gap = (config.width - height) / 2;
+        var gap = (game.scale.width - height) / 2;
         var textPos = 1.5 * gap + height;
-        var fontSize = (config.width - scalex * 32) / 4;
+        var fontSize = (game.scale.width - scalex * 32) / 4;
 
         var scoreText = this.add.text(x, textPos, state.score, {
             fontSize: `${fontSize}px`
